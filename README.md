@@ -12,7 +12,7 @@ We provide annotations for:
 
 * `>100K` keypoint correspondences between Scan and CAD models
 * `>15K` objects between Scan and CAD
-- `>1600` scans (with an annotated hidden testset)
+* `>1600` scans (with an annotated hidden testset)
 
 [Download Paper (.pdf)](https://arxiv.org/pdf/1811.11187.pdf) 
 
@@ -28,7 +28,7 @@ If you would like to download the *Scan2CAD* dataset, please fill out this [goog
 
 A download script will be provided to automatically download the dataset.
 
-## Format of the Dataset
+## Format of the Datasets
 
 The dataset consists of *2* files:
 
@@ -91,7 +91,7 @@ This file is merely a helper file as the information in this file are deducible 
 },
 ```
 
-### Visualization of the dataset
+### Visualization of the Dataset
 
 Once you have downloaded the dataset files, you can run `./Routines/Script/Annotation2Mesh` to preview the annotations as seen here (toggle scan/CADs):
 
@@ -99,7 +99,7 @@ Once you have downloaded the dataset files, you can run `./Routines/Script/Annot
 
 ## Data Generation for *Scan2CAD* Alignment
 
-### Scan and CAD repository
+### Scan and CAD Repository
 
 In this work we used 3D scans from the [ScanNet](https://github.com/ScanNet/ScanNet) dataset and CAD models from [ShapeNet (version 2.0)](https://www.shapenet.org/). If you want to use it too, then you have to send an email and ask for the data - they usually do it very quickly.
 
@@ -107,7 +107,7 @@ Here is a sample (see in `./Assets/scannet-sample/` and `./Assets/shapenet-sampl
 
 <img src="http://oi65.tinypic.com/143diiu.jpg" alt="" width="400" >
 
-### Voxelization of data as signed distance function (sdf) and unsigned distance function (df) files
+### Voxelization of Data as Signed Distance Function (sdf) and unsigned Distance Function (df) files
 
 The data must be processed such that scans are represented as **sdf** and CADs as **df** voxel grids as illustrated here (see in `./Assets/scannet-voxelized-sdf-sample/` and `./Assets/shapenet-voxelized-df-sample/`):
 
