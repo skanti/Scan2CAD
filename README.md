@@ -10,9 +10,9 @@ Dataset used in the research project:
 
 We provide annotations for:
 
-- >100K keypoint correspondences between Scan and CAD models
-- >15K objects between Scan and CAD
-- >1600 scans (with an annotated hidden testset)
+* `<`100K keypoint correspondences between Scan and CAD models
+* `<`15K objects between Scan and CAD
+- `<`1600 scans (with an annotated hidden testset)
 
 [Download Paper (.pdf)](https://arxiv.org/pdf/1811.11187.pdf) 
 
