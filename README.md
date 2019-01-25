@@ -32,8 +32,8 @@ A download script will be provided to automatically download the dataset.
 
 The dataset consists of *2* files:
 
-- full_annotations.json
-- cad_appearances.json (merely a helper file)
+- `full_annotations.json`
+- `cad_appearances.json` (merely a helper file)
 
 ### Format of "full_annotions.json"
 
