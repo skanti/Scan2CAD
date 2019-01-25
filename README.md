@@ -2,25 +2,31 @@
 
 We present *Scan2CAD*, a novel data-driven method that learns to align 3D CAD models from a shape database to 3D scans.
 
-## Description: 
+<img src="http://oi67.tinypic.com/2a5i13m.jpg" alt="Scan2CAD" width="512" >
 
-Dataset used in the research project:
-
-**Scan2CAD: Learning CAD Model Alignment in RGB-D Scans**
-
-We provide annotations for:
-
-* `>100K` keypoint correspondences between Scan and CAD models
-* `>15K` objects between Scan and CAD
-* `>1600` scans (with an annotated hidden testset)
-
+ 
 [Download Paper (.pdf)](https://arxiv.org/pdf/1811.11187.pdf) 
 
 [See Youtube Video](https://www.youtube.com/watch?v=PiHSYpgLTfA&t=1s)
 
 [Link to the annotation webapp source code](https://github.com/skanti/Scan2CAD-Annotation-Webapp)
 
-<img src="http://oi67.tinypic.com/2a5i13m.jpg" alt="Scan2CAD" width="512" >
+## Description: 
+
+Dataset used in the research project: **Scan2CAD: Learning CAD Model Alignment in RGB-D Scans**
+
+For the public dataset, we provide annotations with:
+
+* `97607` keypoint correspondences between Scan and CAD models
+* `14225` objects between Scan and CAD
+* `1506` scans (with an annotated hidden testset)
+
+An additional annotated hidden testset, that is used for our Scan2CAD benchmark contains:
+
+* `7557` keypoint correspondences between Scan and CAD models
+* `1160` objects between Scan and CAD
+* `97` scans (with an annotated hidden testset)
+
 
 ## Download *Scan2CAD* Dataset (Annotation Data)
 
@@ -29,11 +35,6 @@ If you would like to download the *Scan2CAD* dataset, please fill out this [goog
 A download script will be provided to automatically download the dataset.
 
 ## Format of the Datasets
-
-The dataset consists of *2* files:
-
-- `full_annotations.json`
-- `cad_appearances.json` (merely a helper file)
 
 ### Format of "full_annotions.json"
 
@@ -71,8 +72,6 @@ aligned_models : [{ // <-- list of aligned models for this scene
 { ... },
 ]
 ```
-
-
 
 ### Format of "cad_appearances.json"
 
