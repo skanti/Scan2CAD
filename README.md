@@ -11,6 +11,17 @@ We present *Scan2CAD*, a novel data-driven method that learns to align 3D CAD mo
 
 [Link to the annotation webapp source code](https://github.com/skanti/Scan2CAD-Annotation-Webapp)
 
+## Demo samples
+### Scan2CAD Alignments
+
+<img src="https://i.ibb.co/wLPGtYt/anim0.gif" alt="Loadu" width="640" >
+
+### Orientated Bounding Boxes for Objects
+
+<img src="https://i.ibb.co/BL5pRLz/tmp.png" alt="Scan2CAD" width="512" >
+
+
+
 ## Description
 
 Dataset used in the research project: **Scan2CAD: Learning CAD Model Alignment in RGB-D Scans**
