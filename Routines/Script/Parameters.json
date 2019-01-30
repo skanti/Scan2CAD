@@ -1,0 +1,8 @@
+{
+	"scannet" : "../../Assets/scannet-sample/",
+	"shapenet" : "../../Assets/shapenet-sample/",
+	"scannet_voxelized" : "../../Assets/scannet-voxelized-sdf-sample/",
+	"shapenet_voxelized" : "../../Assets/shapenet-voxelized-df-sample/",
+	"centers" : "../../Assets/training-data/scan-centers-sample/",
+	"heatmaps" : "../../Assets/training-data/CAD-heatmaps-sample/"
+}

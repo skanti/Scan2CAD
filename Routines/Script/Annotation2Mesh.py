@@ -6,7 +6,6 @@ import pathlib
 import os
 import shutil
 import glob
-import ParameterParser
 import JSONHelper
 import CSVHelper
 import csv
@@ -62,7 +61,7 @@ def decompose_mat4(M):
     return t, q, s
 
 if __name__ == '__main__':
-    params = ParameterParser.parse("./Parameters.csv") # <-- read parameter file (contains dataset paths)
+    params = JSONHelper.read("./Parameters.json") # <-- read parameter file (contains dataset paths)
 
     faces0 = []
     verts0 = []
