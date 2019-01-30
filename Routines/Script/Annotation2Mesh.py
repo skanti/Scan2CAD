@@ -86,7 +86,7 @@ if __name__ == '__main__':
             if scan_file == "": # <-- do just once, because scene is same for all cad models
                 scan_file = params["scannet"] + "/" + id_scan + "/" + id_scan + "_vh_clean_2.ply"
                 Mscan = make_M_from_tqs(r["trs"]["translation"], r["trs"]["rotation"], r["trs"]["scale"])
-                assert(os.path.exists(scan_file), scan_file + " does not exist.")
+                assert os.path.exists(scan_file), scan_file + " does not exist."
                 with open(scan_file, 'rb') as read_file:
                     mesh_scan = PlyData.read(read_file)
                 for v in mesh_scan["vertex"]: 
