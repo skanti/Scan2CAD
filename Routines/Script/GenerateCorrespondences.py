@@ -17,7 +17,6 @@ import quaternion
 import os
 import shutil
 import multiprocessing as mp
-import ParameterParser
 import CSVHelper
 import JSONHelper
 
@@ -34,7 +33,7 @@ def make_M_from_tqs(t, q, s):
     return M 
 
 if __name__ == '__main__':
-    params = ParameterParser.parse("./Parameters.csv")
+    params = JSONHelper.read("./Parameters.json")
 
     print("NOTE: Symmetry not handled. You have to take care of it.")
 
