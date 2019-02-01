@@ -42,6 +42,28 @@ An additional annotated hidden testset, that is used for our Scan2CAD benchmark 
 
 We published a new benchmark for CAD model alignment in 3D scans (and more tasks to come) [here](http://kaldir.vc.in.tum.de/scan2cad_benchmark/).
 
+## Get started
+
+1. Clone repo:
+
+```git clone https://github.com/skanti/Scan2CAD.git```
+
+2. Ask for dataset: (see sections below. You will need *ScanNet*, *ShapeNet* and *Scan2CAD*). 
+
+4. Copy dataset content into `./Routines/Script/`.
+
+3. Visualize data:
+
+```./Routines/Script/Annotation2Mesh.py```
+
+4. Generate data:
+
+```./Routines/Script/GenerateCorrespondences.py```
+
+5. Start `pytorch` training for heatmap prediction:
+
+```comming soon```
+
 ## Download *Scan2CAD* Dataset (Annotation Data)
 
 If you would like to download the *Scan2CAD* dataset, please fill out this [google-form](https://goo.gl/forms/gJRMjzj05whyJDlO2). 
@@ -106,7 +128,7 @@ This file is merely a helper file as the information in this file are deducible 
 
 ### Visualization of the Dataset
 
-Once you have downloaded the dataset files, you can run `./Routines/Script/Annotation2Mesh` to preview the annotations as seen here (toggle scan/CADs):
+Once you have downloaded the dataset files, you can run `./Routines/Script/Annotation2Mesh.py` to preview the annotations as seen here (toggle scan/CADs):
 
 <img src="http://oi66.tinypic.com/28bxkya.jpg" alt="" width="700" >
 
