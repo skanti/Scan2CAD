@@ -30,13 +30,13 @@ For the public dataset, we provide annotations with:
 
 * `97607` keypoint correspondences between Scan and CAD models
 * `14225` objects between Scan and CAD
-* `1506` scans (with an annotated hidden testset)
+* `1506` scans
 
 An additional annotated hidden testset, that is used for our Scan2CAD benchmark contains:
 
 * `7557` keypoint correspondences between Scan and CAD models
 * `1160` objects between Scan and CAD
-* `97` scans (with an annotated hidden testset)
+* `97` scans
 
 ## Benchmark
 
