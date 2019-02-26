@@ -68,7 +68,7 @@ We published a new benchmark for CAD model alignment in 3D scans (and more tasks
 
 If you would like to download the *Scan2CAD* dataset, please fill out this [google-form](https://goo.gl/forms/gJRMjzj05whyJDlO2). 
 
-A download script will be provided to automatically download the dataset.
+A download link will be provided to download a `.zip` file (approx. 8MB) that contains the dataset.
 
 ## Format of the Datasets
 
