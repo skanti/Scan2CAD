@@ -1,4 +1,4 @@
-# Scan2CAD
+# Scan2CAD CVPR 2019 Oral
 
 We present *Scan2CAD*, a novel data-driven method that learns to align 3D CAD models from a shape database to 3D scans.
 
