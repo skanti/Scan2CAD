@@ -3,111 +3,68 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <cassert>
 #include <iostream>
 #include <fstream>
 #include <eigen3/Eigen/Dense>
 
-//#include <sys/stat.h>
-//#include <sys/types.h>
-//#include <sys/file.h>
-//#include <sys/fcntl.h>
-//#include <unistd.h>
-//
-//struct LockInfo {
-//	int fd;
-//	std::string file;
-//};
-//
-//LockInfo lock(std::string filename) {
-//	LockInfo li;
-//	li.file = filename + ".lock";
-//	while(1) {
-//		li.fd = open(li.file.c_str(), O_CREAT);
-//		flock(li.fd, LOCK_EX);
-//		
-//		struct stat st0 = {};
-//		struct stat st1 = {};
-//		fstat(li.fd, &st0);
-//		stat(li.file.c_str(), &st1);
-//		if(st0.st_ino == st1.st_ino) break;
-//
-//		close(li.fd);
-//	}
-//	return li;
-//}
-//
-//void unlock(LockInfo &li) {
-//	unlink(li.file.c_str());
-//	flock(li.fd, LOCK_UN);
-//}
-template<typename T, int n_channel>
-static void load_vox(std::string filename, Eigen::Vector3i &grid_dims, float &res, Eigen::Matrix4f &grid2world, std::vector<T> &data, bool is_col_major=true) {
 
-	std::ifstream inFile(filename, std::ios::binary);
-	assert(inFile.is_open());
+struct Vox {
+	Eigen::Vector3i dims;
+	float res;
+	Eigen::Matrix4f grid2world;
+	std::vector<float> sdf;
+	std::vector<float> pdf;
+};
 
+inline static Vox load_vox(std::string filename) {
 	
-	inFile.read((char*)grid_dims.data(), 3*sizeof(int32_t));
-	inFile.read((char*)&res, sizeof(float));
-	inFile.read((char*)grid2world.data(), 16*sizeof(float));
-	if (!is_col_major)
-		grid2world.transposeInPlace();
+	std::ifstream f(filename, std::ios::binary);
+	assert(f.is_open());
+
+	bool is_row_major = false;
+
+	std::string extension = filename.substr(filename.find_last_of(".") + 1);
+	if (extension == "df")
+		is_row_major = true;
+	else if (extension == "sdf")
+		is_row_major = true;
 	
-	int n_elems = grid_dims(0)*grid_dims(1)*grid_dims(2);	
+	Vox vox;
+
+	f.read((char*)vox.dims.data(), 3*sizeof(int32_t));
+	f.read((char*)&vox.res, sizeof(float));
+	f.read((char*)vox.grid2world.data(), 16*sizeof(float));
+	if (is_row_major)
+		vox.grid2world = vox.grid2world.transpose().eval();
 	
-	data.resize(n_elems);
-	inFile.read((char*)data.data(), n_elems*n_channel*sizeof(T));
-	inFile.close();	
+	int n_elems = vox.dims(0)*vox.dims(1)*vox.dims(2);	
 	
+	vox.sdf.resize(n_elems);
+	f.read((char*)vox.sdf.data(), n_elems*sizeof(float));
+
+	if(f && f.peek() != EOF) {
+		vox.pdf.resize(n_elems);
+		f.read((char*)vox.pdf.data(), n_elems*sizeof(float));
+	}
+	f.close();	
+
+	return vox;
 }
 
-template<typename T0, int n_channel0, typename T1, int n_channel1>
-static void load_vox(std::string filename, Eigen::Vector3i &grid_dims, float &res, Eigen::Matrix4f &grid2world, std::vector<T0> &data0, std::vector<T1> &data1) {
+inline static void save_vox(std::string filename, Vox &vox) {
+	std::ofstream f;
+	f.open(filename, std::ofstream::out | std::ios::binary);
+	assert(f.is_open());
+	f.write((char*)vox.dims.data(), 3*sizeof(int32_t));
+	f.write((char*)&vox.res, sizeof(float));
+	f.write((char*)vox.grid2world.data(), 16*sizeof(float));
 	
-	std::ifstream inFile(filename, std::ios::binary);
-	assert(inFile.is_open());
-
-	inFile.read((char*)grid_dims.data(), 3*sizeof(int32_t));
-	inFile.read((char*)&res, sizeof(float));
-	inFile.read((char*)grid2world.data(), 16*sizeof(float));
-	
-	int n_elems = grid_dims(0)*grid_dims(1)*grid_dims(2);	
-	
-	data0.resize(n_channel0*n_elems);
-	data1.resize(n_channel1*n_elems);
-	inFile.read((char*)data0.data(), n_elems*n_channel0*sizeof(T0));
-	inFile.read((char*)data1.data(), n_elems*n_channel1*sizeof(T1));
-	inFile.close();	
-	
-}
-
-template<typename T, int n_channel>
-static void save_vox(std::string filename, Eigen::Vector3i grid_dims, float res, Eigen::Matrix4f grid2world, std::vector<T> &data) {
-	std::ofstream outFile;
-	outFile.open(filename, std::ofstream::out | std::ios::binary);
-	assert(outFile.is_open());
-	outFile.write((char*)grid_dims.data(), 3*sizeof(int32_t));
-	outFile.write((char*)&res, sizeof(float));
-	
-	int n_size = n_channel*grid_dims(0)*grid_dims(1)*grid_dims(2);
-	outFile.write((char*)grid2world.data(), 16*sizeof(float));
-	outFile.write((char*)data.data(), n_channel*n_size*sizeof(float));
-	outFile.close();
-	
-}
-
-template<typename T0, int n_channels0, typename T1, int n_channels1>
-static void save_vox(std::string filename, Eigen::Vector3i grid_dims, float res, Eigen::Matrix4f grid2world, std::vector<T0> &data0, std::vector<T1> &data1) {
-	std::ofstream outFile;
-	outFile.open(filename, std::ofstream::out | std::ios::binary);
-	assert(outFile.is_open());
-	outFile.write((char*)grid_dims.data(), 3*sizeof(int32_t));
-	outFile.write((char*)&res, sizeof(float));
-	outFile.write((char*)grid2world.data(), 16*sizeof(float));
-	
-	int n_size = grid_dims(0)*grid_dims(1)*grid_dims(2);
-	outFile.write((char*)data0.data(), n_channels0*n_size*sizeof(T0));
-	outFile.write((char*)data1.data(), n_channels1*n_size*sizeof(T1));
-	outFile.close();
+	int n_size = vox.dims(0)*vox.dims(1)*vox.dims(2);
+	if (vox.sdf.size() > 0)
+		f.write((char*)vox.sdf.data(), n_size*sizeof(float));
+	if (vox.pdf.size() > 0)
+		f.write((char*)vox.pdf.data(), n_size*sizeof(float));
+	f.close();
 	
 }

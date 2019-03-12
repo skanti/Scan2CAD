@@ -55,9 +55,10 @@ if __name__ == '__main__':
             print("catid-cad", catid_cad, "id-cad", id_cad, model["sym"])
             
             basename_trainingdata = "_".join([id_scan, catid_cad, id_cad, str(counter)]) + "_" # <-- this defines the basename of the training data for crops and heatmaps. pattern is "id_scan/catid_cad/id_cad/i_cad/i_kp"
+
             
             # -> Create CAD heatmaps
-            voxfile_cad = params["shapenet_voxelized"] + "/" + catid_cad + "/" + id_cad + "/" + id_cad + "__0__.df"
+            voxfile_cad = params["shapenet_voxelized"] + "/" + catid_cad + "/" + id_cad + "__0__.df"
             kps_cad = np.array(model["keypoints_cad"]["position"]).reshape(3, -1, order="F")
             n_kps_cad = kps_cad.shape[1]
             kps_cad = np.vstack((kps_cad, np.ones((1, n_kps_cad))))
@@ -82,6 +83,7 @@ if __name__ == '__main__':
                 center = params["centers"] + "/" + basename_trainingdata + str(i) + ".vox"
                 heatmap = params["heatmaps"] + "/" + basename_trainingdata + str(i) + ".vox2"
                 item = {"center" : center, "heatmap" : heatmap, "customname" : basename_trainingdata + str(i), "scale" : scale, "match" : True} # <-- in this demo only positive samples
+                print("idx-kp", i, "center", os.path.realpath(center), "heatmap", os.path.realpath(heatmap))
                 training_data.append(item)
             # <-
 

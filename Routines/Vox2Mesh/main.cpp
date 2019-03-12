@@ -26,14 +26,6 @@ struct InputArgs {
 Eigen::MatrixXf box_vertices, box_normals;
 Eigen::Matrix<uint32_t, -1, -1> box_elements;
 
-struct Vox {
-	Eigen::Vector3i grid_dims;
-	Eigen::Matrix4f grid2world;
-	float res;
-	std::vector<float> sdf;
-	std::vector<float> pdf;
-};
-
 struct PlyMesh {
 	Eigen::Matrix<float, -1, -1> V;
 	Eigen::Matrix<float, -1, -1> N;
@@ -45,10 +37,10 @@ void get_position_and_color_from_vox(Vox &vox, PlyMesh &mesh, Eigen::Vector3f vo
 	std::vector<Eigen::Vector3f> positions;
 	std::vector<Eigen::Matrix<uint8_t, 3, 1>> colors;
 	int n_voxels = 0;
-	for (int k = 0; k < vox.grid_dims[2]; k++) {
-		for (int j = 0; j < vox.grid_dims[1]; j++) {
-			for (int i = 0; i < vox.grid_dims[0]; i++) {
-				int index = k*vox.grid_dims[1]*vox.grid_dims[0] + j*vox.grid_dims[0] + i;
+	for (int k = 0; k < vox.dims[2]; k++) {
+		for (int j = 0; j < vox.dims[1]; j++) {
+			for (int i = 0; i < vox.dims[0]; i++) {
+				int index = k*vox.dims[1]*vox.dims[0] + j*vox.dims[0] + i;
 				if (std::abs(vox.sdf[index]) <= inargs.trunc*vox.res) {
 					Eigen::Vector3f p;
 					p = (vox.grid2world*Eigen::Vector4f(i, j, k, 1)).topRows(3);
@@ -150,16 +142,7 @@ int main(int argc, char** argv) {
 	Vox vox;
 	Eigen::Vector3f voxelsize(1, 1, 1);
 
-	if (inargs.in.find(".vox2") != std::string::npos)
-		load_vox<float, 1, float, 1>(inargs.in, vox.grid_dims, vox.res, vox.grid2world, vox.sdf, vox.pdf);
-	else if (inargs.in.find(".vox") != std::string::npos)
-		load_vox<float, 1>(inargs.in, vox.grid_dims, vox.res, vox.grid2world, vox.sdf);
-	else if (inargs.in.find(".df") != std::string::npos) {
-		load_vox<float, 1>(inargs.in, vox.grid_dims, vox.res, vox.grid2world, vox.sdf, false);	
-	} else {
-		fprintf(stderr, "Error: Grid format not known.\n");
-		std::exit(1);
-	}
+	vox = load_vox(inargs.in);
 
 	if (inargs.is_unitless) {
 		Eigen::Vector3f t;
@@ -173,8 +156,8 @@ int main(int argc, char** argv) {
 		vox.pdf.resize(vox.sdf.size());
 		std::fill(vox.pdf.begin(), vox.pdf.end(), 0);
 		if (inargs.redcenter) {
-			int c = vox.grid_dims(0)/2;
-			int dim = vox.grid_dims(0);
+			int c = vox.dims(0)/2;
+			int dim = vox.dims(0);
 			int w = 1;
 			for (int i = c - w; i < c + w + 1; i++)
 				for (int j = c - w; j < c + w + 1; j++)
