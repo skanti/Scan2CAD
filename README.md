@@ -140,7 +140,7 @@ Once you have downloaded the dataset files, you can run `./Routines/Script/Annot
 
 ### Scan and CAD Repository
 
-In this work we used 3D scans from the [ScanNet](https://github.com/ScanNet/ScanNet) dataset and CAD models from [ShapeNet (version 2.0)](https://www.shapenet.org/). If you want to use it too, then you have to send an email and ask for the data - they usually do it very quickly.
+In this work we used 3D scans from the [ScanNet](https://github.com/ScanNet/ScanNet) dataset and CAD models from [ShapeNetCore (version 2.0)](https://www.shapenet.org/). If you want to use it too, then you have to send an email and ask for the data - they usually do it very quickly.
 
 Here is a sample (see in `./Assets/scannet-sample/` and `./Assets/shapenet-sample/`):
 
@@ -155,7 +155,7 @@ The data must be processed such that scans are represented as **sdf** and CADs a
 In order to create **sdf** voxel grids from the scans, *volumetric fusion* is performed to fuse depth maps into a voxel grid containing the entire scene.
 For the sdf grid we used a voxel resolution of `3cm` and a truncation distance of `15cm`. 
 
-In order to generate the **df** voxel grids for the CADs we used [this](https://github.com/christopherbatty/SDFGen) repo (thanks to @christopherbatty).
+In order to generate the **df** voxel grids for the CADs we used a modification (see `CADVoxelization.py`) of [this](https://github.com/christopherbatty/SDFGen) repo (thanks to @christopherbatty).
 
 ### Creating Training Samples
 
