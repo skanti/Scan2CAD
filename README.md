@@ -50,17 +50,21 @@ We published a new benchmark for CAD model alignment in 3D scans (and more tasks
 
 2. Ask for dataset: (see sections below. You will need *ScanNet*, *ShapeNet* and *Scan2CAD*). 
 
-4. Copy dataset content into `./Routines/Script/`.
+3. Copy dataset content into `./Routines/Script/`.
 
-3. Visualize data:
+4. Visualize data:
 
 ```./Routines/Script/Annotation2Mesh.py```
 
-4. Generate data:
+5. Voxelize CADs (shapenet):
+
+```./Routines/Script/CADVoxelization.py```
+
+6. Generate data (correspondences):
 
 ```./Routines/Script/GenerateCorrespondences.py```
 
-5. Start `pytorch` training for heatmap prediction:
+7. Start `pytorch` training for heatmap prediction:
 
 ```comming soon```
 
