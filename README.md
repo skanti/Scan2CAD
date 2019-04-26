@@ -54,15 +54,15 @@ We published a new benchmark for CAD model alignment in 3D scans (and more tasks
 
 4. Visualize data:
 
-```./Routines/Script/Annotation2Mesh.py```
+```python3 ./Routines/Script/Annotation2Mesh.py```
 
 5. Voxelize CADs (shapenet):
 
-```./Routines/Script/CADVoxelization.py```
+```python3 ./Routines/Script/CADVoxelization.py```
 
 6. Generate data (correspondences):
 
-```./Routines/Script/GenerateCorrespondences.py```
+```python3 ./Routines/Script/GenerateCorrespondences.py```
 
 7. Start `pytorch` training for heatmap prediction:
 
