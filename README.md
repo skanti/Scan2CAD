@@ -56,15 +56,22 @@ We published a new benchmark for CAD model alignment in 3D scans (and more tasks
 
 ```python3 ./Routines/Script/Annotation2Mesh.py```
 
-5. Voxelize CADs (shapenet):
+5. Compile `c++` programs
+
+```
+cd {Vox2Mesh, DFGen, CropCentered}
+make
+```
+
+6. Voxelize CADs (shapenet):
 
 ```python3 ./Routines/Script/CADVoxelization.py```
 
-6. Generate data (correspondences):
+7. Generate data (correspondences):
 
 ```python3 ./Routines/Script/GenerateCorrespondences.py```
 
-7. Start `pytorch` training for heatmap prediction:
+8. Start `pytorch` training for heatmap prediction:
 
 ```comming soon```
 
