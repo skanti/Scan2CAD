@@ -185,10 +185,11 @@ The generated data totals to approximately `500GB`. Here is an example of the da
 If you use this dataset or code please cite:
 
 ```
-@article{avetisyan2018scan2cad,
-	title={Scan2CAD: Learning CAD Model Alignment in RGB-D Scans},
-	author={Avetisyan, Armen and Dahnert, Manuel and Dai, Angela and Savva, Manolis and Chang, Angel X and Nie{\ss}ner, Matthias},
-	journal={arXiv preprint arXiv:1811.11187},
-	year={2018}
+@InProceedings{Avetisyan_2019_CVPR,
+author = {Avetisyan, Armen and Dahnert, Manuel and Dai, Angela and Savva, Manolis and Chang, Angel X. and Niessner, Matthias},
+title = {Scan2CAD: Learning CAD Model Alignment in RGB-D Scans},
+booktitle = {The IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+month = {June},
+year = {2019}
 }
 ```
