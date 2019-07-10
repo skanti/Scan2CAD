@@ -75,7 +75,24 @@ make
 
 8. Start `pytorch` training for heatmap prediction:
 
-```comming soon```
+```
+cd ./Network/pytorch
+./run.sh
+```
+
+9. Run alignment algorithm:
+
+```
+cd Routines/Scripts
+python3 Alignment9DoF.py --projectdir /Network/pytorch/output/dummy
+```
+
+10. Mesh and view alignment result:
+
+```
+cd Routines/Scripts
+python3 Alignment2Mesh.py --alignment ./tmp/alignments/dummy/scene0470_00.csv --out ./
+```
 
 ## Download *Scan2CAD* Dataset (Annotation Data)
 
