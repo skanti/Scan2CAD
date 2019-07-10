@@ -47,14 +47,15 @@ if __name__ == '__main__':
 
         training_data = []
 
-        counter = 0
+        counter_cads = 0
+        counter_heatmaps = 0
         for model in r["aligned_models"]:
             catid_cad = model["catid_cad"]
             id_cad = model["id_cad"]
             Mcad = make_M_from_tqs(model["trs"]["translation"], model["trs"]["rotation"], model["trs"]["scale"])
             print("catid-cad", catid_cad, "id-cad", id_cad, model["sym"])
             
-            basename_trainingdata = "_".join([id_scan, catid_cad, id_cad, str(counter)]) + "_" # <-- this defines the basename of the training data for crops and heatmaps. pattern is "id_scan/catid_cad/id_cad/i_cad/i_kp"
+            basename_trainingdata = "_".join([id_scan, catid_cad, id_cad, str(counter_cads)]) + "_" # <-- this defines the basename of the training data for crops and heatmaps. pattern is "id_scan/catid_cad/id_cad/i_cad/i_kp"
 
             
             # -> Create CAD heatmaps
@@ -80,15 +81,22 @@ if __name__ == '__main__':
             # -> training list (to be read in by the network)
             scale = model["trs"]["scale"]
             for i in range(n_kps_scan):
-                center = params["centers"] + "/" + basename_trainingdata + str(i) + ".vox"
-                heatmap = params["heatmaps"] + "/" + basename_trainingdata + str(i) + ".vox2"
-                item = {"center" : center, "heatmap" : heatmap, "customname" : basename_trainingdata + str(i), "scale" : scale, "match" : True} # <-- in this demo only positive samples
-                print("idx-kp", i, "center", os.path.realpath(center), "heatmap", os.path.realpath(heatmap))
+                p_scan = kps_scan[0:3, i].tolist()
+                filename_vox_center = params["centers"] + "/" + basename_trainingdata + str(i) + ".vox"
+                filename_vox_heatmap = params["heatmaps"] + "/" + basename_trainingdata + str(i) + ".vox2"
+                item = {"filename_vox_center" : filename_vox_center, "filename_vox_heatmap" : filename_vox_heatmap, "customname" : basename_trainingdata + str(i), 
+                        "p_scan" : p_scan, "scale" : scale, "match" : True} # <-- in this demo only positive samples
                 training_data.append(item)
+                counter_heatmaps += 1
+            counter_cads += 1
             # <-
 
-            counter += 1
+        print("\n*********")
+        print("Generated training samples (heatmaps):", counter_heatmaps, "for", counter_cads, "cad models.")
+        print("The demo version generates POSITIVE correspondences only for a single scene (scene0470_00). If you want to generate training data for all scannet scenes then just ask for the data.\n")
 
-        JSONHelper.write("../../Assets/training-data/trainset.json", training_data)
+        filename_json = "../../Assets/training-data/trainset.json"
+        JSONHelper.write(filename_json, training_data)
+        print("Training json-file (needed from network) saved in:", filename_json)
 
 

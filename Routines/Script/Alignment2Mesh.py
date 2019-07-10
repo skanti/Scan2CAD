@@ -99,7 +99,7 @@ if __name__ == '__main__':
         cad_mesh = pywavefront.Wavefront(cad_file, collect_faces=True, parse=True)
         Mcad = make_M_from_tqs(t, q, s)
 
-        print("CAD", cad_file, "n-verts", len(cad_mesh.vertices))
+        #print("CAD", cad_file, "n-verts", len(cad_mesh.vertices))
         color = (50, 200, 50)
         faces = []
         verts = []
@@ -107,31 +107,34 @@ if __name__ == '__main__':
         for name, mesh in cad_mesh.meshes.items():
             for f in mesh.faces:
                 faces.append((np.array(f[0:3]) + len(verts0),))
-                n0 = cad_mesh.parser.normals[f[3]]
+                #n0 = cad_mesh.parser.normals[f[3]]
                 v0 = cad_mesh.vertices[f[0]]
                 v1 = cad_mesh.vertices[f[1]]
                 v2 = cad_mesh.vertices[f[2]]
                 if len(v0) == 3:
-                    cad_mesh.vertices[f[0]] = v0 + n0 + color
+                    cad_mesh.vertices[f[0]] = v0 + color
                 if len(v1) == 3:
-                    cad_mesh.vertices[f[1]] = v1 + n0 + color
+                    cad_mesh.vertices[f[1]] = v1 + color
                 if len(v2) == 3:
-                    cad_mesh.vertices[f[2]] = v2 + n0 + color
+                    cad_mesh.vertices[f[2]] = v2 + color
         faces0.extend(faces)
         
         for v in cad_mesh.vertices[:]:
-            if len(v) != 9:
-                v = (0, 0, 0) + (0, 0, 0) + (0, 0, 0)
+            if len(v) != 6:
+                v = (0, 0, 0) + (0, 0, 0)
             vi = tuple(np.dot(Mcad, np.array([v[0], v[1], v[2], 1]))[0:3])
-            ni = tuple(np.dot(np.linalg.inv(Mcad).transpose(), np.array([v[3], v[4], v[5], 1]))[0:3])
-            ci = tuple(v[6:9])
-            verts.append(vi + ni + ci)
+            #ni = tuple(np.dot(np.linalg.inv(Mcad).transpose(), np.array([v[3], v[4], v[5], 1]))[0:3])
+            ci = tuple(v[3:6])
+            verts.append(vi + ci)
         verts0.extend(verts)
 
-    verts0 = np.asarray(verts0, dtype=[('x', 'f4'), ('y', 'f4'), ('z', 'f4'), ('nx', 'f4'), ('ny', 'f4'), ('nz', 'f4'), ('red', 'u1'), ('green', 'u1'), ('blue', 'u1')])
+    verts0 = np.asarray(verts0, dtype=[('x', 'f4'), ('y', 'f4'), ('z', 'f4'), ('red', 'u1'), ('green', 'u1'), ('blue', 'u1')])
     faces0 = np.asarray(faces0, dtype=[('vertex_indices', 'i4', (3,))])
     objdata = PlyData([PlyElement.describe(verts0, 'vertex', comments=['vertices']),  PlyElement.describe(faces0, 'face')], comments=['faces'])
-    with open(outdir + "/alignment.ply", mode='wb') as f:
+
+    filename_ply = outdir + "/alignment.ply"
+    with open(filename_ply, mode='wb') as f:
         PlyData(objdata).write(f)
+    print("Meshfile generated:", filename_ply)
 
 
