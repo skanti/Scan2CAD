@@ -13,6 +13,8 @@ We present *Scan2CAD*, a novel data-driven method that learns to align 3D CAD mo
 
 [Scan2CAD Benchmark Link](http://kaldir.vc.in.tum.de/scan2cad_benchmark/)
 
+[Get the *Scan2CAD* dataset - we reply very quickly:)](https://goo.gl/forms/gJRMjzj05whyJDlO2)
+
 ## Demo samples
 ### Scan2CAD Alignments
 
