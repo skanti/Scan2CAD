@@ -44,6 +44,26 @@ def make_M_from_tqs(t, q, s):
     M = T.dot(R).dot(S)
     return M 
 
+def calc_Mbbox(model):
+    trs_obj = model["trs"]
+    bbox_obj = np.asarray(model["bbox"], dtype=np.float64)
+    center_obj = np.asarray(model["center"], dtype=np.float64)
+    trans_obj = np.asarray(trs_obj["translation"], dtype=np.float64)
+    rot_obj = np.asarray(trs_obj["rotation"], dtype=np.float64)
+    q_obj = np.quaternion(rot_obj[0], rot_obj[1], rot_obj[2], rot_obj[3])
+    scale_obj = np.asarray(trs_obj["scale"], dtype=np.float64)
+
+    tcenter1 = np.eye(4)
+    tcenter1[0:3, 3] = center_obj
+    trans1 = np.eye(4)
+    trans1[0:3, 3] = trans_obj
+    rot1 = np.eye(4)
+    rot1[0:3, 0:3] = quaternion.as_rotation_matrix(q_obj)
+    scale1 = np.eye(4)
+    scale1[0:3, 0:3] = np.diag(scale_obj)*np.diag(bbox_obj)
+    M = trans1.dot(rot1).dot(scale1).dot(tcenter1)
+    return M
+
 def decompose_mat4(M):
     R = M[0:3, 0:3]
     sx = np.linalg.norm(R[0:3, 0])
@@ -62,15 +82,46 @@ def decompose_mat4(M):
 
 if __name__ == '__main__':
     params = JSONHelper.read("./Parameters.json") # <-- read parameter file (contains dataset paths)
+    with open("./bbox.ply", 'rb') as read_file:
+        mesh_bbox = PlyData.read(read_file)
+    assert mesh_bbox, "Could not read bbox template."
 
-    faces0 = []
-    verts0 = []
-    norms0 = []
-    scan_file = ""
-    for r in JSONHelper.read("./full_annotations.json"):
+    filename_json = "./full_annotations.json"
+    if not os.path.exists(filename_json):
+        filename_json = "./example_annotation.json"
+
+    for r in JSONHelper.read(filename_json):
         id_scan = r["id_scan"]
         if id_scan != "scene0470_00":
             continue
+
+        outdir = os.path.abspath(opt.out + "/" + id_scan)
+        pathlib.Path(outdir).mkdir(parents=True, exist_ok=True) 
+
+
+        scan_file = params["scannet"] + "/" + id_scan + "/" + id_scan + "_vh_clean_2.ply"
+        Mscan = make_M_from_tqs(r["trs"]["translation"], r["trs"]["rotation"], r["trs"]["scale"])
+        assert os.path.exists(scan_file), scan_file + " does not exist."
+
+        with open(scan_file, 'rb') as read_file:
+            mesh_scan = PlyData.read(read_file)
+        for v in mesh_scan["vertex"]: 
+            v1 = np.array([v[0], v[1], v[2], 1])
+            v1 = np.dot(Mscan, v1)
+
+            v[0] = v1[0]
+            v[1] = v1[1]
+            v[2] = v1[2]
+            # <-- ignore normals etc.
+
+        with open(outdir + "/scan.ply", mode='wb') as f:
+            PlyData(mesh_scan).write(f)
+
+
+        faces_bbox = []
+        verts_bbox = []
+        faces_cad = []
+        verts_cad = []
         for model in r["aligned_models"]:
             t = model["trs"]["translation"]
             q = model["trs"]["rotation"]
@@ -78,40 +129,26 @@ if __name__ == '__main__':
 
             id_cad = model["id_cad"]
             catid_cad = model["catid_cad"]
-
-            outdir = os.path.abspath(opt.out + "/" + id_scan)
-            pathlib.Path(outdir).mkdir(parents=True, exist_ok=True) 
-
-
-            if scan_file == "": # <-- do just once, because scene is same for all cad models
-                scan_file = params["scannet"] + "/" + id_scan + "/" + id_scan + "_vh_clean_2.ply"
-                Mscan = make_M_from_tqs(r["trs"]["translation"], r["trs"]["rotation"], r["trs"]["scale"])
-                assert os.path.exists(scan_file), scan_file + " does not exist."
-                with open(scan_file, 'rb') as read_file:
-                    mesh_scan = PlyData.read(read_file)
-                for v in mesh_scan["vertex"]: 
-                    v1 = np.array([v[0], v[1], v[2], 1])
-                    v1 = np.dot(Mscan, v1)
-
-                    v[0] = v1[0]
-                    v[1] = v1[1]
-                    v[2] = v1[2]
-
-                with open(outdir + "/scan.ply", mode='wb') as f:
-                    PlyData(mesh_scan).write(f)
+        
+            Mbbox = calc_Mbbox(model)
+            for f in mesh_bbox["face"]: 
+                faces_bbox.append((np.array(f[0]) + len(verts_bbox),))
+            for v in mesh_bbox["vertex"]: 
+                v1 = np.array([v[0], v[1], v[2], 1])
+                v1 = np.dot(Mbbox, v1)[0:3]
+                verts_bbox.append(tuple(v1) + (50,50,200))
 
             cad_file = params["shapenet"] + "/" + catid_cad + "/" + id_cad  + "/models/model_normalized.obj"
             cad_mesh = pywavefront.Wavefront(cad_file, collect_faces=True, parse=True)
             Mcad = make_M_from_tqs(t, q, s)
 
-            print("CAD", cad_file, "n-verts", len(cad_mesh.vertices))
+            #print("CAD", cad_file, "n-verts", len(cad_mesh.vertices))
             color = (50, 200, 50)
             faces = []
             verts = []
-            norms = []
             for name, mesh in cad_mesh.meshes.items():
                 for f in mesh.faces:
-                    faces.append((np.array(f[0:3]) + len(verts0),))
+                    faces.append((np.array(f[0:3]) + len(verts_cad),))
                     v0 = cad_mesh.vertices[f[0]]
                     v1 = cad_mesh.vertices[f[1]]
                     v2 = cad_mesh.vertices[f[2]]
@@ -121,7 +158,7 @@ if __name__ == '__main__':
                         cad_mesh.vertices[f[1]] = v1 + color
                     if len(v2) == 3:
                         cad_mesh.vertices[f[2]] = v2 + color
-            faces0.extend(faces)
+            faces_cad.extend(faces)
             
             for v in cad_mesh.vertices[:]:
                 if len(v) != 6:
@@ -129,12 +166,20 @@ if __name__ == '__main__':
                 vi = tuple(np.dot(Mcad, np.array([v[0], v[1], v[2], 1]))[0:3])
                 ci = tuple(v[3:6])
                 verts.append(vi + ci)
-            verts0.extend(verts)
+            verts_cad.extend(verts)
 
-    verts0 = np.asarray(verts0, dtype=[('x', 'f4'), ('y', 'f4'), ('z', 'f4'), ('red', 'u1'), ('green', 'u1'), ('blue', 'u1')])
-    faces0 = np.asarray(faces0, dtype=[('vertex_indices', 'i4', (3,))])
-    objdata = PlyData([PlyElement.describe(verts0, 'vertex', comments=['vertices']),  PlyElement.describe(faces0, 'face')], comments=['faces'])
+    verts_cad = np.asarray(verts_cad, dtype=[('x', 'f4'), ('y', 'f4'), ('z', 'f4'), ('red', 'u1'), ('green', 'u1'), ('blue', 'u1')])
+    faces_cad = np.asarray(faces_cad, dtype=[('vertex_indices', 'i4', (3,))])
+    objdata = PlyData([PlyElement.describe(verts_cad, 'vertex', comments=['vertices']),  PlyElement.describe(faces_cad, 'face')], comments=['faces'])
     savename = outdir + "/alignment.ply"
+    print("alignment saved",savename)
+    with open(savename, mode='wb') as f:
+        PlyData(objdata).write(f)
+    
+    verts_bbox = np.asarray(verts_bbox, dtype=[('x', 'f4'), ('y', 'f4'), ('z', 'f4'), ('red', 'u1'), ('green', 'u1'), ('blue', 'u1')])
+    faces_bbox = np.asarray(faces_bbox, dtype=[('vertex_indices', 'i4', (3,))])
+    objdata = PlyData([PlyElement.describe(verts_bbox, 'vertex', comments=['vertices']),  PlyElement.describe(faces_bbox, 'face')], comments=['faces'])
+    savename = outdir + "/bbox.ply"
     print("alignment saved",savename)
     with open(savename, mode='wb') as f:
         PlyData(objdata).write(f)
