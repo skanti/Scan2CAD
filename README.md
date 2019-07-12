@@ -158,11 +158,11 @@ This file is merely a helper file as the information in this file are deducible 
 },
 ```
 
-### Visualization of the Dataset
+### Visualization of the Dataset + BBoxes
 
-Once you have downloaded the dataset files, you can run `./Routines/Script/Annotation2Mesh.py` to preview the annotations as seen here (toggle scan/CADs):
+Once you have downloaded the dataset files, you can run `./Routines/Script/Annotation2Mesh.py` to preview the annotations as seen here (toggle scan/CADs/BBox):
 
-<img src="http://oi66.tinypic.com/28bxkya.jpg" alt="" width="700" >
+<img src="http://oi66.tinypic.com/2epsmpy.jpg" alt="" width="700" >
 
 ## Data Generation for *Scan2CAD* Alignment
 
