@@ -172,7 +172,13 @@ In this work we used 3D scans from the [ScanNet](https://github.com/ScanNet/Scan
 
 Here is a sample (see in `./Assets/scannet-sample/` and `./Assets/shapenet-sample/`):
 
-<img src="http://oi65.tinypic.com/143diiu.jpg" alt="" width="400" >
+| ScanNet Color             |  ScanNet Labels |
+:-------------------------:|:-------------------------:
+![](Assets/github-pics/scannet-color.png)  |  ![](Assets/github-pics/scannet-label.png)
+
+| ShapeNet Trashbin             |  ShapeNet Chair | ShapeNet Table |
+:-------------------------:|:-------------------------:|:-------------------------:
+![](Assets/github-pics/shapenet-trashbin.png)  |  ![](Assets/github-pics/shapenet-chair.png) |  ![](Assets/github-pics/shapenet-table.png)
 
 ### Voxelization of Data as Signed Distance Function (sdf) and unsigned Distance Function (df) files
 
