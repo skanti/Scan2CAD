@@ -60,8 +60,10 @@ def calc_Mbbox(model):
     rot1 = np.eye(4)
     rot1[0:3, 0:3] = quaternion.as_rotation_matrix(q_obj)
     scale1 = np.eye(4)
-    scale1[0:3, 0:3] = np.diag(scale_obj)*np.diag(bbox_obj)
-    M = trans1.dot(rot1).dot(scale1).dot(tcenter1)
+    scale1[0:3, 0:3] = np.diag(scale_obj)
+    bbox1 = np.eye(4)
+    bbox1[0:3, 0:3] = np.diag(bbox_obj)
+    M = trans1.dot(rot1).dot(scale1).dot(tcenter1).dot(bbox1)
     return M
 
 def decompose_mat4(M):

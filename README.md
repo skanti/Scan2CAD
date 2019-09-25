@@ -2,7 +2,7 @@
 
 We present *Scan2CAD*, a novel data-driven method that learns to align 3D CAD models from a shape database to 3D scans.
 
-<img src="http://oi67.tinypic.com/2a5i13m.jpg" alt="Scan2CAD" width="512" >
+<img src="Assets/github-pics/teaser.png" alt="Scan2CAD" width="640" >
 
  
 [Download Paper (.pdf)](https://arxiv.org/pdf/1811.11187.pdf) 
@@ -162,7 +162,7 @@ This file is merely a helper file as the information in this file are deducible 
 
 Once you have downloaded the dataset files, you can run `./Routines/Script/Annotation2Mesh.py` to preview the annotations as seen here (toggle scan/CADs/BBox):
 
-<img src="http://oi66.tinypic.com/2epsmpy.jpg" alt="" width="700" >
+<img src="Assets/github-pics/alignment.png" alt="" width="700" >
 
 ## Data Generation for *Scan2CAD* Alignment
 
@@ -172,7 +172,13 @@ In this work we used 3D scans from the [ScanNet](https://github.com/ScanNet/Scan
 
 Here is a sample (see in `./Assets/scannet-sample/` and `./Assets/shapenet-sample/`):
 
-<img src="http://oi65.tinypic.com/143diiu.jpg" alt="" width="400" >
+| ScanNet Color             |  ScanNet Labels |
+:-------------------------:|:-------------------------:
+![](Assets/github-pics/scannet-color.png)  |  ![](Assets/github-pics/scannet-label.png)
+
+| ShapeNet Trashbin             |  ShapeNet Chair | ShapeNet Table |
+:-------------------------:|:-------------------------:|:-------------------------:
+![](Assets/github-pics/shapenet-trashbin.png)  |  ![](Assets/github-pics/shapenet-chair.png) |  ![](Assets/github-pics/shapenet-table.png)
 
 ### Voxelization of Data as Signed Distance Function (sdf) and unsigned Distance Function (df) files
 
