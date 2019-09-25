@@ -2,7 +2,7 @@
 
 We present *Scan2CAD*, a novel data-driven method that learns to align 3D CAD models from a shape database to 3D scans.
 
-<img src="http://oi67.tinypic.com/2a5i13m.jpg" alt="Scan2CAD" width="512" >
+<img src="Assets/github-pics/teaser.png" alt="Scan2CAD" width="512" >
 
  
 [Download Paper (.pdf)](https://arxiv.org/pdf/1811.11187.pdf) 
