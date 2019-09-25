@@ -184,7 +184,9 @@ Here is a sample (see in `./Assets/scannet-sample/` and `./Assets/shapenet-sampl
 
 The data must be processed such that scans are represented as **sdf** and CADs as **df** voxel grids as illustrated here (see in `./Assets/scannet-voxelized-sdf-sample/` and `./Assets/shapenet-voxelized-df-sample/`):
 
-<img src="http://oi67.tinypic.com/2n2ag6.jpg" alt="" width="400" >
+| ShapeNet Trashbin Vox           |  ShapeNet Chair Vox | ShapeNet Table Vox |
+:-------------------------:|:-------------------------:|:-------------------------:
+![](Assets/github-pics/shapenet-trashbin-vox.png)  |  ![](Assets/github-pics/shapenet-chair-vox.png) |  ![](Assets/github-pics/shapenet-table-vox.png)
 
 In order to create **sdf** voxel grids from the scans, *volumetric fusion* is performed to fuse depth maps into a voxel grid containing the entire scene.
 For the sdf grid we used a voxel resolution of `3cm` and a truncation distance of `15cm`. 
@@ -203,7 +205,10 @@ From the *Scan2CAD* dataset this will generate following:
 
 The generated data totals to approximately `500GB`. Here is an example of the data generation (see in `./Assets/training-data/scan-centers-sample/` and `./Assets/training-data/CAD-heatmaps-sample/`)
 
-<img src="http://oi65.tinypic.com/se3ntk.jpg" alt="" width="400" >
+| Scan Center Vox           |  CAD Heatmap Vox (to be gaussian blurred) |
+:-------------------------:|:-------------------------:|
+![](Assets/github-pics/pair0a.png)  |  ![](Assets/github-pics/pair0b.png) 
+![](Assets/github-pics/pair1a.png)  |  ![](Assets/github-pics/pair1b.png) 
 
 ## Citation
 
