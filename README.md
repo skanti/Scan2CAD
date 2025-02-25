@@ -15,7 +15,34 @@ We present *Scan2CAD*, a novel data-driven method that learns to align 3D CAD mo
 [Scan2CAD Benchmark Link](http://kaldir.vc.in.tum.de/scan2cad_benchmark/)
 
 
-[Get the *Scan2CAD* dataset - we reply very quickly:)](https://goo.gl/forms/gJRMjzj05whyJDlO2)
+[Get the *Scan2CAD* dataset](https://goo.gl/forms/gJRMjzj05whyJDlO2)
+
+
+## Download Dataset
+
+Thank you for your interest in Scan2CAD. Please follow the following link to download the dataset (.zip):
+[Download Link](http://kaldir.vc.in.tum.de/scan2cad_download_link)
+
+Inside the .zip file, you will find following files:
+
+    unzip_root/
+      - 'full_annotations.json' is the actual dataset with the Scan2CAD alignments and keypoints on the public dataset
+      - 'cad_appearances.json' is a helper file that contains how often an unique ShapeNet model appears per scene
+      - 'unique_cad.csv' is a helper file that contains a unique list of all used ShapeNet model in this dataset
+      - benchmark_input_files/
+          - 'cad_appearances_hidden_testset.json' contains information on the number of appearances of a CAD model appears per scene in the hidden testset
+          - 'scannet_hidden_testset.json' contains a list of all scenes that appear in the hidden test set which are used in this benchmark
+     
+
+ 
+Some useful info:
+
+    To visualize the dataset, please use the visualizer in this repo.
+    In this work we used 3D scans from the ScanNet dataset and CAD models from ShapeNet (version 2.0).
+
+ 
+Good luck!
+
 
 ## Demo samples
 ### Scan2CAD Alignments
